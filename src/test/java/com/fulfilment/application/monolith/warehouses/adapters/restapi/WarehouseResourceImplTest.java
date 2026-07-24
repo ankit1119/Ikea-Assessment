@@ -112,7 +112,8 @@ public class WarehouseResourceImplTest {
 		
 		com.warehouse.api.beans.Warehouse request = new com.warehouse.api.beans.Warehouse();
 		
-		assertThrows(WebApplicationException.class, ()->resource.createANewWarehouseUnit(request));
+		assertThrows(WebApplicationException.class,
+				()->resource.createANewWarehouseUnit(request));
 		
 	}
 	
@@ -143,7 +144,8 @@ public class WarehouseResourceImplTest {
 		
 		WarehouseResourceImpl resource = createResource(repository, null, null, null);
 		
-		assertThrows(WebApplicationException.class, ()->resource.getAWarehouseUnitByID("UNKNOWN"));
+		assertThrows(WebApplicationException.class,
+				()->resource.getAWarehouseUnitByID("UNKNOWN"));
 
 
 	}
@@ -185,7 +187,8 @@ public class WarehouseResourceImplTest {
 											mock(ArchiveWarehouseOperation.class),
 											mock(ReplaceWarehouseOperation.class));
 		
-		assertThrows(WebApplicationException.class, ()->resource.getAWarehouseUnitByID("UNKNOWN"));
+		assertThrows(WebApplicationException.class,
+				()->resource.getAWarehouseUnitByID("UNKNOWN"));
 		
 	}
 	
@@ -233,7 +236,8 @@ public class WarehouseResourceImplTest {
 		
 		com.warehouse.api.beans.Warehouse request = new com.warehouse.api.beans.Warehouse();
 		
-		assertThrows(WebApplicationException.class, ()->resource.replaceTheCurrentActiveWarehouse("BU001",request));
+		assertThrows(WebApplicationException.class,
+				()->resource.replaceTheCurrentActiveWarehouse("BU001",request));
 
 }
 	

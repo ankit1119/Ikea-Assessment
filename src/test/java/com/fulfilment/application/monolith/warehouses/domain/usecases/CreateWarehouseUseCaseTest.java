@@ -78,4 +78,54 @@ public class CreateWarehouseUseCaseTest {
 		
 	}
 	
+	@Test
+	void shouldThrowWhenCapacityExceedsLocationCapacity() {
+		
+		WarehouseStore store = mock(WarehouseStore.class);
+		LocationResolver resolver = mock(LocationResolver.class);
+		
+		when(store.findByBusinessUnitCode("BU001")).thenReturn(null);
+		
+		Location location = new Location("AMSTERDAM-001", 10, 50);
+		
+		when(resolver.resolveByIdentifier("AMSTERDAM-001")).thenReturn(location);
+		
+		CreateWarehouseUseCase useCase = new CreateWarehouseUseCase(store, resolver);
+		
+		Warehouse warehouse = new Warehouse();
+		warehouse.businessUnitCode = "BU001";
+		warehouse.location = "AMSTERDAM-001";
+		warehouse.capacity = 100;
+		warehouse.stock = 20;
+		
+		assertThrows(IllegalArgumentException.class,()->useCase.create(warehouse));
+
+		
+	}
+	
+	@Test
+	void shouldThrowWhenStockExceedsCapacity() {
+		
+		WarehouseStore store = mock(WarehouseStore.class);
+		LocationResolver resolver = mock(LocationResolver.class);
+		
+		when(store.findByBusinessUnitCode("BU001")).thenReturn(null);
+		
+		Location location = new Location("AMSTERDAM-001", 10, 100);
+		
+		when(resolver.resolveByIdentifier("AMSTERDAM-001")).thenReturn(location);
+		
+		CreateWarehouseUseCase useCase = new CreateWarehouseUseCase(store, resolver);
+		
+		Warehouse warehouse = new Warehouse();
+		warehouse.businessUnitCode = "BU001";
+		warehouse.location = "AMSTERDAM-001";
+		warehouse.capacity = 50;
+		warehouse.stock = 60;
+		
+		assertThrows(IllegalArgumentException.class,()->useCase.create(warehouse));
+
+		
+	}
+	
 }

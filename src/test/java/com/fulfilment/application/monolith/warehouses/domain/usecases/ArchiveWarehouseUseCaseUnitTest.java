@@ -61,7 +61,7 @@ public class ArchiveWarehouseUseCaseUnitTest {
 		ArchiveWarehouseUseCase useCase = new ArchiveWarehouseUseCase(store);
 		
 		Warehouse warehouse = new Warehouse();
-		existing.businessUnitCode = "BU001";
+		warehouse.businessUnitCode = "BU001";
 		
 		assertThrows(IllegalArgumentException.class,()->useCase.archive(warehouse));
 	}

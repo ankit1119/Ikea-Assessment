@@ -175,5 +175,41 @@ public class ProductResourceTest {
 		assertThrows(WebApplicationException.class,()->resource.update(999L, product));
 
 	}
+	
+	@Test
+	void shouldRejectUpdateWhenNameMissing() throws Exception{
+		
+		ProductRepository repository = mock(ProductRepository.class);
+		ProductResource resource = new ProductResource();
+		
+		Field field = ProductResource.class.getDeclaredField("productRepository");
+		field.setAccessible(true);
+		field.set(resource, repository);
+				
+		Product product = new Product();
+		product.name = null;
+		
+		assertThrows(WebApplicationException.class,
+				()->resource.update(999L, product));
+
+	}
+	
+	@Test
+	void shouldRejectCreateWhenIdExist() throws Exception{
+		
+		ProductRepository repository = mock(ProductRepository.class);
+		ProductResource resource = new ProductResource();
+		
+		Field field = ProductResource.class.getDeclaredField("productRepository");
+		field.setAccessible(true);
+		field.set(resource, repository);
+				
+		Product product = new Product("Laptop");
+		product.id = 1L;
+		
+		assertThrows(WebApplicationException.class,
+				()->resource.update(999L, product));
+
+	}
 
 }

@@ -86,7 +86,7 @@ public class ReplaceWarehouseUseCaseUnitTest {
 	}
 	
 	@Test
-	void shouldThrowWhenLocationIsIncalid() {
+	void shouldThrowWhenLocationIsInvalid() {
 		
 		WarehouseStore store = mock(WarehouseStore.class);
 		LocationResolver resolver = mock(LocationResolver.class);
@@ -108,7 +108,7 @@ public class ReplaceWarehouseUseCaseUnitTest {
 	}
 	
 	@Test
-	void shouldThrowWhenCapacityExceeddLocationCapacity() {
+	void shouldThrowWhenCapacityExceedsLocationCapacity() {
 		
 		WarehouseStore store = mock(WarehouseStore.class);
 		LocationResolver resolver = mock(LocationResolver.class);
@@ -120,7 +120,7 @@ public class ReplaceWarehouseUseCaseUnitTest {
 		
 		Location location = new Location("AMSTERDAM-001", 10, 50);
 		
-		when(resolver.resolveByIdentifier("BU001")).thenReturn(location);
+		when(resolver.resolveByIdentifier("AMSTERDAM-001")).thenReturn(location);
 		
 		ReplaceWarehouseUseCase useCase = new ReplaceWarehouseUseCase(store, resolver);
 		

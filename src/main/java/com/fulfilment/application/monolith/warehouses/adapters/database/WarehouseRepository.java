@@ -47,7 +47,11 @@ public class WarehouseRepository implements WarehouseStore, PanacheRepository<Db
   @Override
   public void remove(Warehouse warehouse) {
     // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'remove'");
+    long deleted = delete("businessUnitCode", warehouse.businessUnitCode);
+    
+    if(deleted == 0) {
+    	throw new IllegalArgumentException("Warehouse not found:" + warehouse.businessUnitCode);
+    }
   }
 
   @Override
