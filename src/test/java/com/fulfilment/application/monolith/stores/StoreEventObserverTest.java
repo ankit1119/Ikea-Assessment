@@ -11,48 +11,54 @@ import org.mockito.Mockito;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@QuarkusTest
+import java.lang.reflect.Field;
+
+ 
 public class StoreEventObserverTest {
 
-  @Inject
-  StoreEventObserver storeEventObserver;
-
-  @InjectMock
-  LegacyStoreManagerGateway legacyGateway;
-
-  private Store testStore;
-
-  @BeforeEach
-  @Transactional
-  public void setup() {
-    Store.deleteAll();
-    
-    testStore = new Store();
-    testStore.name = "Test Store";
-    testStore.quantityProductsInStock = 100;
-  }
-
   @Test
-  public void testStoreCreatedEventCallsLegacyGateway() throws InterruptedException {
-    Mockito.reset(legacyGateway);
-
-    StoreCreatedEvent event = new StoreCreatedEvent(testStore);
-    storeEventObserver.onStoreCreated(event);
-    
-    Thread.sleep(100);
-    
-    verify(legacyGateway, times(1)).createStoreOnLegacySystem(any(Store.class));
+  void shouldHandleStoreCreatedEvent() throws Exception {
+	  
+	  StoreEventObserver observer = new StoreEventObserver();
+	  
+	  LegacyStoreManagerGateway gateway = mock(LegacyStoreManagerGateway.class);
+	  
+	  Field field = StoreEventObserver.class.getDeclaredField("legacyStoreManagerGateway");
+	  
+	  field.setAccessible(true);
+	  field.set(observer, gateway);
+	  
+	  Store store = new Store("Test store");
+	  store.id = 1L;
+	  
+	  StoreCreatedEvent event = new StoreCreatedEvent(store);
+	  
+	  observer.onStoreCreated(event);
+	  verify(gateway).createStoreOnLegacySystem(store);
+	  
+	  
   }
-
+  
   @Test
-  public void testStoreUpdatedEventCallsLegacyGateway() throws InterruptedException {
-    Mockito.reset(legacyGateway);
-
-    StoreUpdatedEvent event = new StoreUpdatedEvent(testStore);
-    storeEventObserver.onStoreUpdated(event);
-    
-    Thread.sleep(100);
-    
-    verify(legacyGateway, times(1)).updateStoreOnLegacySystem(any(Store.class));
+  void shouldHandleStoreUpdatedEvent() throws Exception {
+	  
+	  StoreEventObserver observer = new StoreEventObserver();
+	  
+	  LegacyStoreManagerGateway gateway = mock(LegacyStoreManagerGateway.class);
+	  
+	  Field field = StoreEventObserver.class.getDeclaredField("legacyStoreManagerGateway");
+	  
+	  field.setAccessible(true);
+	  field.set(observer, gateway);
+	  
+	  Store store = new Store("Updated store");
+	  store.id = 2L;
+	  
+	  StoreUpdatedEvent event = new StoreUpdatedEvent(store);
+	  
+	  observer.onStoreUpdated(event);
+	  verify(gateway).updateStoreOnLegacySystem(store);
+	  
+	  
   }
 }
