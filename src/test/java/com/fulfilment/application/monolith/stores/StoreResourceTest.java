@@ -27,15 +27,5 @@ public class StoreResourceTest {
 		given().contentType("application/json").body(body).when().post("/store").then().statusCode(201).body("id", notNullValue());
 	}
 
-	@Test
-	void shouldRejectCreateWhenIdProvided() {
-		
-		String body = """
-				{
-				"name":"Test Store",
-				"quantityProductsInStock":10
-				}
-				""";
-		given().contentType("application/json").body(body).when().post("/store").then().statusCode(201).body("id", notNullValue());
-	}
+
 }
