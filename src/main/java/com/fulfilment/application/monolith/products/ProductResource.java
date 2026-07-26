@@ -38,6 +38,7 @@ public class ProductResource {
   @GET
   @Path("{id}")
   public Product getSingle(Long id) {
+	  LOGGER.infof("Fetching product with id=%d", id);
     Product entity = productRepository.findById(id);
     if (entity == null) {
       throw new WebApplicationException("Product with id of " + id + " does not exist.", 404);
@@ -48,11 +49,13 @@ public class ProductResource {
   @POST
   @Transactional
   public Response create(Product product) {
+	  LOGGER.info("Request to create product received");
     if (product.id != null) {
       throw new WebApplicationException("Id was invalidly set on request.", 422);
     }
 
     productRepository.persist(product);
+    LOGGER.infof("Product created successfully with id=%d", product.id);
     return Response.ok(product).status(201).build();
   }
 
@@ -60,7 +63,9 @@ public class ProductResource {
   @Path("{id}")
   @Transactional
   public Product update(Long id, Product product) {
+	  LOGGER.infof("Updating product with id=%d", id);
     if (product.name == null) {
+    	LOGGER.warnf("Product update rejected for id=%d because name is null", id);
       throw new WebApplicationException("Product Name was not set on request.", 422);
     }
 
@@ -76,7 +81,7 @@ public class ProductResource {
     entity.stock = product.stock;
 
     productRepository.persist(entity);
-
+	 LOGGER.infof("Product updated successfully");
     return entity;
   }
 
@@ -84,8 +89,10 @@ public class ProductResource {
   @Path("{id}")
   @Transactional
   public Response delete(Long id) {
+	  LOGGER.infof("Delecting product with id=%d", id);
     Product entity = productRepository.findById(id);
     if (entity == null) {
+    	LOGGER.warnf("Product not found for deletion. id=%d", id);
       throw new WebApplicationException("Product with id of " + id + " does not exist.", 404);
     }
     productRepository.delete(entity);

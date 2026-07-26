@@ -44,6 +44,7 @@ public class StoreResource {
   @GET
   @Path("{id}")
   public Store getSingle(Long id) {
+	LOGGER.infof("Fetching store with id=%d", id); 
     Store entity = Store.findById(id);
     if (entity == null) {
       throw new WebApplicationException("Store with id of " + id + " does not exist.", 404);
@@ -54,11 +55,13 @@ public class StoreResource {
   @POST
   @Transactional
   public Response create(Store store) {
+	LOGGER.info("Request to create store received");
     if (store.id != null) {
       throw new WebApplicationException("Id was invalidly set on request.", 422);
     }
 
     store.persist();
+	LOGGER.infof("Store created successfully with id=%d", store.id);
     storeCreatedEvent.fire(new StoreCreatedEvent(store));
 
     return Response.ok(store).status(201).build();
@@ -68,7 +71,9 @@ public class StoreResource {
   @Path("{id}")
   @Transactional
   public Store update(Long id, Store updatedStore) {
+	LOGGER.infof("Updating store with id=%d", id);
     if (updatedStore.name == null) {
+    	LOGGER.warnf("Store update rejected for id=%d because name is null", id);
       throw new WebApplicationException("Store Name was not set on request.", 422);
     }
 
@@ -90,7 +95,9 @@ public class StoreResource {
   @Path("{id}")
   @Transactional
   public Store patch(Long id, Store updatedStore) {
+		LOGGER.infof("Partially updating store with id=%d", id);
     if (updatedStore.name == null) {
+    	LOGGER.warnf("Store patch rejected for id=%d because name is null", id);
       throw new WebApplicationException("Store Name was not set on request.", 422);
     }
 
@@ -117,8 +124,10 @@ public class StoreResource {
   @Path("{id}")
   @Transactional
   public Response delete(Long id) {
+		LOGGER.infof("Delecting store with id=%d", id);
     Store entity = Store.findById(id);
     if (entity == null) {
+    	LOGGER.warnf("Store not found for deletion. id=%d", id);
       throw new WebApplicationException("Store with id of " + id + " does not exist.", 404);
     }
     entity.delete();
